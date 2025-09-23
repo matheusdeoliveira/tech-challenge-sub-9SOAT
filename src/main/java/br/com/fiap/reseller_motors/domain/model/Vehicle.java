@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class Vehicle {
     private UUID id;
+    private Long version;
     private String make;
     private String model;
     private Integer year;
@@ -21,7 +22,7 @@ public class Vehicle {
     private String soldToCpf;
 
     public Vehicle(UUID id, String make, String model, Integer year, String color, BigDecimal price) {
-        this.id = id == null ? UUID.randomUUID() : id;
+        this.id = id;
         this.make = Objects.requireNonNull(make);
         this.model = Objects.requireNonNull(model);
         this.year = Objects.requireNonNull(year);
@@ -57,6 +58,10 @@ public class Vehicle {
 
     public UUID getId() {
         return id;
+    }
+
+    public Long getVersion() {
+        return version;
     }
 
     public String getMake() {
@@ -101,6 +106,10 @@ public class Vehicle {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public void setMake(String make) {

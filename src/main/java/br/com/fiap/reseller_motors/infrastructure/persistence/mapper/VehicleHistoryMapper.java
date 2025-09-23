@@ -6,7 +6,11 @@ import br.com.fiap.reseller_motors.infrastructure.persistence.jpa.VehicleHistory
 public class VehicleHistoryMapper {
     public static VehicleHistory toDomain(VehicleHistoryJpa e) {
         VehicleHistory h = new VehicleHistory();
-        h.setId(e.getId());
+
+        if (e.getId() != null) {
+            h.setId(e.getId());
+        }
+
         h.setVehicleId(e.getVehicleId());
         h.setChangeType(e.getChangeType());
         h.setOldValueJson(e.getOldValueJson());

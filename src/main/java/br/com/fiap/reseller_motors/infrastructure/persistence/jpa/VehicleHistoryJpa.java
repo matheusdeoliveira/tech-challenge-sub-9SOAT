@@ -8,8 +8,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "vehicle_history")
 public class VehicleHistoryJpa {
+
     @Id
     @GeneratedValue
+    @Column(columnDefinition = "uuid")
     private UUID id;
     @Column(name = "vehicle_id")
     private UUID vehicleId;

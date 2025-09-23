@@ -12,7 +12,6 @@ public class VehicleHistory {
     private OffsetDateTime occurredAt;
 
     public VehicleHistory(UUID vehicleId, String changeType, String oldValueJson, String newValueJson) {
-        this.id = UUID.randomUUID();
         this.vehicleId = vehicleId;
         this.changeType = changeType;
         this.oldValueJson = oldValueJson;

@@ -9,8 +9,16 @@ import java.util.UUID;
 @Entity
 @Table(name = "vehicles")
 public class VehicleJpa {
+
     @Id
+    @GeneratedValue
+    @Column(columnDefinition = "uuid")
     private UUID id;
+
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     private String make;
     private String model;
     private Integer year;
@@ -33,6 +41,14 @@ public class VehicleJpa {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public String getMake() {

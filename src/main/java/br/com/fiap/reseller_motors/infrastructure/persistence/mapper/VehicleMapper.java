@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class VehicleMapper {
     public static Vehicle toDomain(VehicleJpa e) {
         Vehicle v = new Vehicle(e.getId(), e.getMake(), e.getModel(), e.getYear(), e.getColor(), e.getPrice() == null ? BigDecimal.ZERO : e.getPrice());
+        v.setVersion(e.getVersion());
         v.setStatus(VehicleStatus.valueOf(e.getStatus()));
         v.setCreatedAt(e.getCreatedAt());
         v.setUpdatedAt(e.getUpdatedAt());
@@ -19,7 +20,10 @@ public class VehicleMapper {
 
     public static VehicleJpa toEntity(Vehicle v) {
         VehicleJpa e = new VehicleJpa();
-        e.setId(v.getId());
+        if (v.getId() != null) {
+            e.setId(v.getId());
+        }
+        e.setVersion(v.getVersion());
         e.setMake(v.getMake());
         e.setModel(v.getModel());
         e.setYear(v.getYear());
