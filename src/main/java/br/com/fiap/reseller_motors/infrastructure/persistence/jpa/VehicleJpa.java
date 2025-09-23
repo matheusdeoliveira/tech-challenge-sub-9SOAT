@@ -10,7 +10,6 @@ import java.util.UUID;
 @Table(name = "vehicles")
 public class VehicleJpa {
     @Id
-    @GeneratedValue
     private UUID id;
     private String make;
     private String model;
