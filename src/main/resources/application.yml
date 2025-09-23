@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/autos}
+    username: ${DATABASE_USERNAME:autos}
+    password: ${DATABASE_PASSWORD:autos}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc.time_zone: UTC
+        format_sql: true
+    show-sql: false
+  application:
+    name: reseller-motors
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+
+app:
+  seed: ${APP_SEED:false}
+  seedReset: ${APP_SEED_RESET:false}
