@@ -1,0 +1,308 @@
+openapi: 3.0.3
+info:
+  title: Autos API
+  description: API de revenda de veículos com DDD + Arquitetura Hexagonal. Documentação enriquecida com exemplos.
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+    description: Local
+tags:
+  - name: Vehicles
+    description: Operações de cadastro, edição, venda e consulta de veículos
+paths:
+  /api/vehicles:
+    get:
+      tags: [Vehicles]
+      summary: Listar veículos
+      description: Lista veículos por **status** (`available` ou `sold`) ordenados por preço crescente.
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [available, sold]
+            default: available
+          description: Status do veículo
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Página (base 1)
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          description: Tamanho da página
+      responses:
+        "200":
+          description: Lista paginada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedVehiclesResponse'
+              examples:
+                exemplo:
+                  value:
+                    items:
+                      - id: "8e5e1d4e-8b33-4a0a-9a6b-55d2b4bfa111"
+                        make: "Fiat"
+                        model: "Argo"
+                        year: 2022
+                        color: "Branco"
+                        price: 55990.00
+                        status: "AVAILABLE"
+                        createdAt: "2025-09-18T12:00:00Z"
+                        updatedAt: "2025-09-18T12:00:00Z"
+                        soldAt: null
+                        soldToCpf: null
+                    page: 1
+                    pageSize: 20
+                    total: 1
+    post:
+      tags: [Vehicles]
+      summary: Cadastrar veículo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVehicleRequest'
+            examples:
+              exemplo:
+                value:
+                  make: "Volkswagen"
+                  model: "Gol"
+                  year: 2020
+                  color: "Prata"
+                  price: 44990.00
+      responses:
+        "200":
+          description: Veículo criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+              examples:
+                exemplo:
+                  value:
+                    id: "d1a0c0ee-6a71-4a58-ae62-8b62c4e6fa22"
+                    make: "Volkswagen"
+                    model: "Gol"
+                    year: 2020
+                    color: "Prata"
+                    price: 44990.00
+                    status: "AVAILABLE"
+                    createdAt: "2025-09-18T12:05:00Z"
+                    updatedAt: "2025-09-18T12:05:00Z"
+                    soldAt: null
+                    soldToCpf: null
+        "400":
+          description: Erro de validação ou regra de negócio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/vehicles/{id}:
+    get:
+      tags: [Vehicles]
+      summary: Detalhar veículo
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Veículo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        "400":
+          description: Erro
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags: [Vehicles]
+      summary: Editar veículo
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditVehicleRequest'
+            examples:
+              exemplo:
+                value:
+                  price: 52990.00
+                  color: "Cinza"
+      responses:
+        "200":
+          description: Veículo atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        "400":
+          description: Erro
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/vehicles/{id}/sell:
+    post:
+      tags: [Vehicles]
+      summary: Efetuar venda
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SellVehicleRequest'
+            examples:
+              exemplo:
+                value:
+                  buyerCpf: "123.456.789-09"
+                  soldAt: "2025-09-19T17:35:00-03:00"
+      responses:
+        "200":
+          description: Veículo vendido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        "400":
+          description: Erro
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/vehicles/{id}/history:
+    get:
+      tags: [Vehicles]
+      summary: Histórico de alterações do veículo
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Lista de eventos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VehicleHistory'
+              examples:
+                exemplo:
+                  value:
+                    - id: "a1111111-1111-1111-1111-111111111111"
+                      vehicleId: "d1a0c0ee-6a71-4a58-ae62-8b62c4e6fa22"
+                      changeType: "REGISTERED"
+                      oldValueJson: null
+                      newValueJson: { price: 44990.00, color: "Prata" }
+                      occurredAt: "2025-09-18T12:05:00Z"
+                    - id: "a2222222-2222-2222-2222-222222222222"
+                      vehicleId: "d1a0c0ee-6a71-4a58-ae62-8b62c4e6fa22"
+                      changeType: "EDITED"
+                      oldValueJson: { price: 44990.00, color: "Prata" }
+                      newValueJson: { price: 42990.00, color: "Cinza" }
+                      occurredAt: "2025-09-19T12:05:00Z"
+        "400":
+          description: Erro
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Vehicle:
+      type: object
+      required: [id, make, model, year, color, price, status, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        make: { type: string, example: "Fiat" }
+        model: { type: string, example: "Argo" }
+        year: { type: integer, example: 2022, minimum: 1950 }
+        color: { type: string, example: "Branco" }
+        price: { type: number, format: double, example: 55990.00 }
+        status: { type: string, enum: [AVAILABLE, SOLD], example: AVAILABLE }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        soldAt: { type: string, format: date-time, nullable: true }
+        soldToCpf: { type: string, nullable: true, example: "12345678909" }
+    VehicleHistory:
+      type: object
+      required: [id, vehicleId, changeType, occurredAt]
+      properties:
+        id: { type: string, format: uuid }
+        vehicleId: { type: string, format: uuid }
+        changeType: { type: string, example: "REGISTERED" }
+        oldValueJson:
+          description: Valor anterior (estrutura livre)
+          type: object
+          additionalProperties: true
+          nullable: true
+        newValueJson:
+          description: Valor novo (estrutura livre)
+          type: object
+          additionalProperties: true
+          nullable: true
+        occurredAt: { type: string, format: date-time }
+    PagedVehiclesResponse:
+      type: object
+      required: [items, page, pageSize, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vehicle'
+        page: { type: integer, example: 1 }
+        pageSize: { type: integer, example: 20 }
+        total: { type: integer, example: 42 }
+    CreateVehicleRequest:
+      type: object
+      required: [make, model, year, color, price]
+      properties:
+        make: { type: string, example: "Chevrolet" }
+        model: { type: string, example: "Onix" }
+        year: { type: integer, example: 2023, minimum: 1950 }
+        color: { type: string, example: "Preto" }
+        price: { type: number, format: double, example: 79990.00, minimum: 0 }
+    EditVehicleRequest:
+      type: object
+      properties:
+        price: { type: number, format: double, example: 52990.00, minimum: 0 }
+        color: { type: string, example: "Cinza" }
+    SellVehicleRequest:
+      type: object
+      required: [buyerCpf]
+      properties:
+        buyerCpf: { type: string, example: "123.456.789-09" }
+        soldAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2025-09-19T17:35:00-03:00"
+    Error:
+      type: object
+      properties:
+        error: { type: string, example: "VehicleNotFound" }
