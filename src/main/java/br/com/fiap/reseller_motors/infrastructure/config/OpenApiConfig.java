@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Autos API",
+                title = "Reseller Motors",
                 version = "v1",
                 description = "API de revenda de veículos com DDD + Arquitetura Hexagonal",
-                contact = @Contact(name = "Equipe Autos"),
+                contact = @Contact(name = "Equipe Reseller Motors"),
                 license = @License(name = "MIT")
         ),
         servers = {

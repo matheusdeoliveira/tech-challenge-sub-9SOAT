@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Autos API
+  title: Reseller Motors
   description: API de revenda de veículos com DDD + Arquitetura Hexagonal. Documentação enriquecida com exemplos.
   version: "1.0.0"
 servers:
