@@ -40,8 +40,8 @@ public class SeedRunner implements CommandLineRunner {
         Vehicle v10 = registerUC.execute("Nissan", "Kicks", 2022, "Prata", new BigDecimal("109990.00"));
 
         // Marcar alguns como vendidos
-        sellUC.execute(v4.getId(), "123.456.789-09", OffsetDateTime.now().minusDays(2));
-        sellUC.execute(v5.getId(), "111.222.333-96", OffsetDateTime.now().minusDays(1));
-        sellUC.execute(v10.getId(), "987.654.321-00", OffsetDateTime.now());
+        sellUC.execute(v4.getId(), "123.456.789-09", new BigDecimal("39990.00"), OffsetDateTime.now().minusDays(2));
+        sellUC.execute(v5.getId(), "111.222.333-96", new BigDecimal("39990.00"), OffsetDateTime.now().minusDays(1));
+        sellUC.execute(v10.getId(), "987.654.321-00", new BigDecimal("39990.00"), OffsetDateTime.now());
     }
 }

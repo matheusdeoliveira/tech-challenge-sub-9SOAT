@@ -4,7 +4,7 @@ API para revenda de veículos com DDD + Arquitetura Hexagonal + OpenAPI/Swagger 
 
 ## Rodar com Docker
 ```bash
-docker compose up --build
+docker compose up -d --build
 ```
 - API: http://localhost:8080
 - Swagger UI: http://localhost:8080/swagger-ui
@@ -29,3 +29,6 @@ docker compose up --build
 - Arquivo está em `src/main/resources/openapi.yaml`.
 - Swagger UI: `http://localhost:8080/swagger-ui`
 - JSON: `http://localhost:8080/v3/api-docs`
+
+
+docker compose down -v  

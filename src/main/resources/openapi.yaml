@@ -297,6 +297,7 @@ components:
       required: [buyerCpf]
       properties:
         buyerCpf: { type: string, example: "123.456.789-09" }
+        price: { type: number, format: double, example: 55990.00, minimum: 0 }
         soldAt:
           type: string
           format: date-time

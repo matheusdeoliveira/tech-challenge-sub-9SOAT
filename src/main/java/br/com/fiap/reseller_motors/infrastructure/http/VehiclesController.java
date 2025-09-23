@@ -56,14 +56,14 @@ public class VehiclesController {
         return editUC.execute(id, req.price, req.color);
     }
 
-    @Operation(summary = "Efetuar venda", description = "Marca um veículo como vendido com CPF e data (opcional)")
+    @Operation(summary = "Efetuar venda", description = "Marca um veículo como vendido com CPF, preço e data (opcional)")
     @PostMapping("/{id}/sell")
     public Vehicle sell(@Parameter(description = "ID do veículo") @PathVariable UUID id, @Valid @RequestBody SellVehicleRequest req) {
         OffsetDateTime when = null;
         if (req.soldAt != null && !req.soldAt.isBlank()) {
             when = OffsetDateTime.parse(req.soldAt);
         }
-        return sellUC.execute(id, req.buyerCpf, when);
+        return sellUC.execute(id, req.buyerCpf, req.price, when);
     }
 
     @Operation(summary = "Listar veículos", description = "Lista veículos por status (available/sold) ordenados por preço asc")
