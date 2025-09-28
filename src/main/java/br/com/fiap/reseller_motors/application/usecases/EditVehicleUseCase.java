@@ -19,6 +19,7 @@ public class EditVehicleUseCase {
 
     public Vehicle execute(UUID id, BigDecimal newPrice, String newColor) {
         Vehicle v = repo.findById(id).orElseThrow(() -> new RuntimeException("VehicleNotFound"));
+        if (!v.isAvailable()) throw new RuntimeException("VehicleNotAvailable");
         String oldJson = String.format("{\"price\":%s,\"color\":\"%s\"}", v.getPrice(), v.getColor());
         v.edit(newPrice, newColor);
         Vehicle updated = repo.update(v);

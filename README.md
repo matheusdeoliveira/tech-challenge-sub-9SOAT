@@ -133,18 +133,7 @@ Dicas:
 - `GET    /api/vehicles/{id}`
 - `GET    /api/vehicles/{id}/history`
 
-Exemplo cURL (criar veículo):
-```bash
-curl -X POST http://localhost:8080/api/vehicles \
-  -H "Content-Type: application/json" \
-  -d '{
-        "make": "Fiat",
-        "model": "Pulse",
-        "year": 2023,
-        "price": 89990.0,
-        "ownerCpf": "12345678901"
-      }'
-```
+Arquivo com todos os endpoints para serem usados no [Postman](/assets/postman_collection.json)
 
 ---
 
@@ -163,7 +152,21 @@ curl -X POST http://localhost:8080/api/vehicles \
 
 ---
 
-## Solução de problemas (FAQ)
-- Porta 8080 ocupada: pare o serviço que usa a porta ou altere `server.port`.
-- Erro de conexão no banco: valide `DATABASE_URL`, usuário/senha e se o Postgres está aceitando conexões.
-- Java incompatível: confirme se está usando Java 21 (veja `build.gradle`).
+## DDD
+
+### Linguagem Ubíqua
+
+- Veículo: agregado principal com atributos: id, marca, modelo, ano, cor, preço, status, datas (criação,atualização, venda).  
+- Status do Veículo: {AVAILABLE, SOLD}.  
+- Venda: ato de transferir o veículo para um comprador, registrando CPF, data e preço de venda (normalmente o preço atual).  
+- Histórico do Veículo: trilha de mudanças (eventos de domínio) registrando o que mudou, quando e opcionalmente o valor anterior/novo
+
+### Domain Storytelling
+![STORYTELLING](./assets/ddd-storytelling.png)
+
+### Event Storming
+![EVENT-STORMING](./assets/ddd-event-storming.png)
+
+## Participante
+- **José Matheus de Oliveira - RM358854**  
+  *Discord*: @jsmatheus | E-mail: matheusoliveira.info@gmail.com

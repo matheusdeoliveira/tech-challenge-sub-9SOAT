@@ -1,0 +1,301 @@
+{
+	"info": {
+		"_postman_id": "32a7bbc0-51b5-494d-8cb4-11f3c2f2413d",
+		"name": "Reseller Motors API – Postman Collection",
+		"description": "Coleção para testar a Reseller Motors (DDD + Hexagonal). Compatível com Postman e importável no Insomnia.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41282059"
+	},
+	"item": [
+		{
+			"name": "Vehicles",
+			"item": [
+				{
+					"name": "Listar – Available",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/vehicles?status=available&page=1&pageSize=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"vehicles"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "available"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar – Sold",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/vehicles?status=sold&page=1&pageSize=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"vehicles"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "sold"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar veículo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"try {",
+									"  var data = pm.response.json();",
+									"  if (data && data.id) {",
+									"    pm.collectionVariables.set(\"vehicleId\", data.id);",
+									"    console.log(\"vehicleId set:\", data.id);",
+									"  }",
+									"} catch (e) {}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"make\": \"Volkswagen\",\n  \"model\": \"Gol\",\n  \"year\": 2020,\n  \"color\": \"Prata\",\n  \"price\": 44990.0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/vehicles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('vehicleId')) {",
+									"  throw new Error('Defina vehicleId (crie um veículo primeiro).');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/vehicles/{{vehicleId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"vehicles",
+								"{{vehicleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar (PATCH)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('vehicleId')) {",
+									"  throw new Error('Defina vehicleId (crie um veículo primeiro).');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"price\": 42990.0,\n  \"color\": \"Cinza\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/vehicles/{{vehicleId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"vehicles",
+								"{{vehicleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vender",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('vehicleId')) {",
+									"  throw new Error('Defina vehicleId (crie um veículo primeiro).');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"buyerCpf\": \"{{buyerCpf}}\",\n  \"soldAt\": \"{{$isoTimestamp}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/vehicles/{{vehicleId}}/sell",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"vehicles",
+								"{{vehicleId}}",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Histórico do veículo",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('vehicleId')) {",
+									"  throw new Error('Defina vehicleId (crie um veículo primeiro).');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/vehicles/{{vehicleId}}/history",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"vehicles",
+								"{{vehicleId}}",
+								"history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "vehicleId",
+			"value": ""
+		},
+		{
+			"key": "buyerCpf",
+			"value": "123.456.789-09"
+		}
+	]
+}
