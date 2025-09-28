@@ -19,8 +19,8 @@ public class UseCasesConfig {
     }
 
     @Bean
-    SellVehicleUseCase sellVehicleUseCase(VehicleRepositoryAdapter repo, VehicleHistoryRepositoryAdapter hist) {
-        return new SellVehicleUseCase(repo, hist);
+    SellVehicleUseCase sellVehicleUseCase(VehicleRepositoryAdapter repo, VehicleHistoryRepositoryAdapter hist, br.com.fiap.reseller_motors.infrastructure.persistence.SalesRepositoryAdapter sales) {
+        return new SellVehicleUseCase(repo, hist, sales);
     }
 
     @Bean

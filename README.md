@@ -110,8 +110,15 @@ java -jar build/libs/*.jar
   ```bash
   ./gradlew test
   ```
-- Para ver logs de debug de testes, adapte/adicione prints conforme necessário.
-
+- Rodar somente os testes do pacote de casos de uso (`br.com.fiap.reseller_motors.application.usecases`):
+  - Linux/macOS (bash/zsh):
+    ```bash
+    ./gradlew test --tests "br.com.fiap.reseller_motors.application.usecases.*"
+    ```
+  - Windows (PowerShell):
+    ```powershell
+    .\gradlew.bat test --tests 'br.com.fiap.reseller_motors.application.usecases.*'
+    ```
 Dicas:
 - Se estiver usando Docker, os testes usam o driver do PostgreSQL runtime apenas se você subir a app; para testes de unidade padrões, o banco não é necessário.
 
