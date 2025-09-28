@@ -4,17 +4,11 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
-# Cache dependencies and ensure Gradle wrapper files are present
+# Cache dependencies
 COPY gradlew gradlew
-# Explicitly copy wrapper files to avoid missing JAR in some build contexts
-COPY gradle/wrapper/gradle-wrapper.jar gradle/wrapper/gradle-wrapper.jar
-COPY gradle/wrapper/gradle-wrapper.properties gradle/wrapper/gradle-wrapper.properties
-
-# Copy Gradle config for better layer caching
+COPY gradle gradle
 COPY settings.gradle settings.gradle
 COPY build.gradle build.gradle
-
-# Verify Gradle is runnable (this will also download the distribution per wrapper settings)
 RUN chmod +x gradlew && ./gradlew --version
 
 # Copy source and build (skip tests for faster image build)
